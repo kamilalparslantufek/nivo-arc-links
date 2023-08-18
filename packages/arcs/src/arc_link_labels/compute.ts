@@ -1,8 +1,7 @@
-import { positionFromAngle } from '@nivo/core'
+import { positionFromAngle, radiansToDegrees } from '@nivo/core'
 import { Arc, Point } from '../types'
 import { getNormalizedAngle } from '../utils'
 import { ArcLink } from './types'
-
 /**
  * Compute text anchor for a given arc.
  *
@@ -37,8 +36,13 @@ export const computeArcLink = (
     const centerAngle = getNormalizedAngle(
         arc.startAngle + (arc.endAngle - arc.startAngle) / 2 - Math.PI / 2
     )
+    const { angleDeg } = arc;
+    const absSin = Math.abs(Math.sin(centerAngle));
+    const offsetReducer = angleDeg < 10 ? 1 : 2;
+    const baseOffset = radiansToDegrees(Math.asin(absSin)) / offsetReducer;
+    const linkDiagonalLengthOffset = baseOffset * absSin;
     const point0: Point = positionFromAngle(centerAngle, arc.outerRadius + offset)
-    const point1: Point = positionFromAngle(centerAngle, arc.outerRadius + offset + diagonalLength)
+    const point1: Point = positionFromAngle(centerAngle, arc.outerRadius + offset + linkDiagonalLengthOffset)
 
     let side: ArcLink['side']
     let point2: Point
