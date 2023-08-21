@@ -1,6 +1,7 @@
 {
   "name": "nivo",
   "private": true,
+  "version":"links",
   "licenses": [
     {
       "type": "MIT",
